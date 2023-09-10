@@ -47,9 +47,21 @@ router.post('/signup', async(req, res) => {
   });
   
   router.post('/courses', authenticateJwt, async (req, res) => {
-    const course = new Course(req.body);
+    const createdCourse = req.body;
+    if(createdCourse){
+    const course = new Course(createdCourse);
+    const courseId: mongoose.Types.ObjectId = course._id;
+    const admin = await Admin.findOne({ username: req.headers.user });
+    if(admin){
     await course.save();
+    admin.createdCourses.push(courseId);
     res.json({ message: 'Course created successfully', courseId: course.id });
+    } else {
+      res.status(403).json({ message: 'admin not found' });
+    }
+    }else {
+      res.status(404).json({ message: 'Course not created' });
+    }
   });
   
   router.put('/courses/:courseId', authenticateJwt, async (req, res) => {
@@ -62,8 +74,12 @@ router.post('/signup', async(req, res) => {
   });
   
   router.get('/courses', authenticateJwt, async (req, res) => {
-    const courses = await Course.find({});
-    res.json({ courses });
+    const admin = await Admin.findOne({username:req.headers.user}).populate('createdCourses');
+    if (admin) {
+      res.json({ createdCourses: admin.createdCourses || [] });
+    } else {
+      res.status(403).json({ message: 'not found' });
+    }
   });
   
   router.get('/course/:courseId', authenticateJwt, async (req, res) => {

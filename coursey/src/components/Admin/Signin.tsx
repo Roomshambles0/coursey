@@ -1,12 +1,11 @@
 import {BsGoogle} from "react-icons/bs";
 import {BsGithub} from "react-icons/bs"
 
-export default function Signin(){
+export default function Adminsignin(){
     return (<div>
-        <div className="mx-auto w-full  bg-black  border-white text-white overflow-hidden shadow-md h-full pt-48">
-        <div className="p-8">
-        <p className="  font-mono font-semibold text-4xl py-5 flex justify-center ">Start your journey with 100xdevs</p>
-        <h1 className="text-white font-mono font-semibold text-7xl py-5 flex justify-center px-10">Be.A.100xDEV</h1>
+        <div className="mx-auto w-full  bg-stone-800  border-white text-white overflow-hidden shadow-md h-full pt-48">
+        <div className="p-5">
+        <p className="  font-mono font-semibold text-4xl pt-5 flex justify-center ">Sign in to <i className=" mx-5 text-black bg-white border  text-center ">100xDEVS</i></p>
         </div>
    <SigninCard></SigninCard>
    </div>

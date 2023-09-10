@@ -20,4 +20,7 @@
     .course-card-grid{
         @apply w-full bg-stone-800 py-10;
     }
+    .course-grid{
+        @apply w-full bg-black py-10;
+    }
 }

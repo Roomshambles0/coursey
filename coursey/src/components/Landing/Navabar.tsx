@@ -9,6 +9,7 @@ export default function Navbar(){
             <p className="navbar-elements navbar-border"><button>Events</button></p>
             <p className="navbar-elements navbar-border"><button>Blogs</button></p>
             <p className="navbar-elements navbar-border"><button>Community</button></p>
+            <p className="navbar-elements navbar-border"><button>Create Courses</button></p>
         </div>
         <div className="right-0 text-center py-1">
             <button className="mx-5 hover:text-green-500 ">Log in</button>
