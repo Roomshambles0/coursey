@@ -15,6 +15,6 @@ app.use("/user", userRouter)
 
 // Connect to MongoDB
 // DONT MISUSE THIS THANKYOU!!
-mongoose.connect('mongodb://localhost:27017/courses');
+mongoose.connect('mongodb://0.0.0.0:27017/courses');
 
 app.listen(3001, () => console.log('Server running on port 3001'));

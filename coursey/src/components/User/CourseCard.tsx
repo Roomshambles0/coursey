@@ -9,7 +9,7 @@ export const CourseCard = (props:any) =>{
     <p className="text-stone-400 text-left ...">{props.desc}</p>
     <p className="pt-2 font-extrabold text-lg ">{props.price}</p>
     </div>
-    <button className="mx-8 mb-5 p-2 border rounded-lg font-semibold font-mono hover:bg-white hover:text-black">Purchase</button>
+    <button className="mx-8 mb-5 p-2 border rounded-lg font-semibold font-mono hover:bg-white hover:text-black" onClick={()=>{alert("course " + props.Cname +" purchased" ) }}>Purchase</button>
     </div>
     </div>
     }

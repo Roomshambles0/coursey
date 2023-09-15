@@ -43,7 +43,9 @@ router.post('/signup', (req, res) => __awaiter(void 0, void 0, void 0, function*
     }
 }));
 router.post('/login', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { username, password } = req.headers;
+    const username = req.body.username;
+    const password = req.body.password;
+    console.log(username);
     const admin = yield db_1.Admin.findOne({ username, password });
     if (admin) {
         const token = jsonwebtoken_1.default.sign({ username, role: 'admin' }, auth_1.SECRET, { expiresIn: '1h' });
@@ -54,9 +56,26 @@ router.post('/login', (req, res) => __awaiter(void 0, void 0, void 0, function* 
     }
 }));
 router.post('/courses', auth_2.authenticateJwt, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const course = new db_1.Course(req.body);
-    yield course.save();
-    res.json({ message: 'Course created successfully', courseId: course.id });
+    const createdCourse = req.body;
+    console.log(req.headers.user);
+    if (createdCourse) {
+        const course = new db_1.Course(createdCourse);
+        const courseId = course._id;
+        const admin = yield db_1.Admin.findOne({ username: req.headers.user });
+        console.log(admin);
+        if (admin) {
+            yield course.save();
+            admin.createdCourses.push(courseId);
+            yield admin.save();
+            res.json({ message: 'Course created successfully', courseId: course.id });
+        }
+        else {
+            res.status(403).json({ message: 'admin not found' });
+        }
+    }
+    else {
+        res.status(404).json({ message: 'Course not created' });
+    }
 }));
 router.put('/courses/:courseId', auth_2.authenticateJwt, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const course = yield db_1.Course.findByIdAndUpdate(req.params.courseId, req.body, { new: true });
@@ -68,8 +87,13 @@ router.put('/courses/:courseId', auth_2.authenticateJwt, (req, res) => __awaiter
     }
 }));
 router.get('/courses', auth_2.authenticateJwt, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const courses = yield db_1.Course.find({});
-    res.json({ courses });
+    const admin = yield db_1.Admin.findOne({ username: req.headers.user }).populate('createdCourses');
+    if (admin) {
+        res.json({ createdCourses: admin.createdCourses || [] });
+    }
+    else {
+        res.status(403).json({ message: 'not found' });
+    }
 }));
 router.get('/course/:courseId', auth_2.authenticateJwt, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const courseId = req.params.courseId;

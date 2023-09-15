@@ -1,76 +1,47 @@
-const Courses = [
-    {name:"Full-Stack Cohort",
-     desc:"Looking to take your team away on a retreat to enjoy awesome food and take in some sunshine? We have a list of places to do just that",
-     img:"/course2.jpg",
-     price:"$599"
-  },
-  {name:"Full-Stack Cohort",
-  desc:"Looking to take your team away on a retreat to enjoy awesome food and take in some sunshine? We have a list of places to do just that",
-  img:"/course2.jpg",
-  price:"$599"
-  },{
-  name:"Full-Stack Cohort",
-  desc:"Looking to take your team away on a retreat to enjoy awesome food and take in some sunshine? We have a list of places to do just that",
-  img:"/course2.jpg",
-  price:"$599"
-  },
-  {
-name:"Full-Stack Cohort",
-desc:"Looking to take your team away on a retreat to enjoy awesome food and take in some sunshine? We have a list of places to do just that",
-img:"/course2.jpg",
-price:"$599"
-},
-    {name:"Full-Stack Cohort",
-    desc:"Looking to take your team away on a retreat to enjoy awesome food and take in some sunshine? We have a list of places to do just that",
-    img:"/course2.jpg",
-    price:"$599"
-    },
-    {
-    name:"Full-Stack Cohort",
-    desc:"Looking to take your team away on a retreat to enjoy awesome food and take in some sunshine? We have a list of places to do just that",
-    img:"/course2.jpg",
-    price:"$599"
-    },
-    {
-    name:"Full-Stack Cohort",
-    desc:"Looking to take your team away on a retreat to enjoy awesome food and take in some sunshine? We have a list of places to do just that",
-    img:"/course2.jpg",
-    price:"$599"
-    },
-    {
-    name:"Full-Stack Cohort",
-    desc:"Looking to take your team away on a retreat to enjoy awesome food and take in some sunshine? We have a list of places to do just that",
-    img:"/course2.jpg",
-    price:"$599"
-    },
-    {
-    name:"Full-Stack Cohort",
-    desc:"Looking to take your team away on a retreat to enjoy awesome food and take in some sunshine? We have a list of places to do just that",
-    img:"/course2.jpg",
-    price:"$599"
-    },
-    {
-    name:"Full-Stack Cohort",
-    desc:"Looking to take your team away on a retreat to enjoy awesome food and take in some sunshine? We have a list of places to do just that",
-    img:"/course2.jpg",
-    price:"$599"
-    }
-  ]
+import Carousel from "better-react-carousel"
+import { useState,useEffect } from "react"
+import axios from "axios"
+import { useSetRecoilState,useRecoilValue } from "recoil"
+import { courseState, coursesstate } from "../../store/atoms/course"
+import { coursesDetails } from "../../store/selectors/courses"
+import { useNavigate } from "react-router-dom"
+
+
 
 
 
 export const Created = ()=>{
+  const setAllcourses = useSetRecoilState(coursesstate); 
+  let courseDetail = useRecoilValue(coursesstate);
+  let courses = courseDetail.courses;
+  const init = async () => {
+    const response = await axios.get(`http://localhost:3001/admin/courses`, {
+        headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`
+        }
+    })
+    const data = response.data.createdCourses;
+    setAllcourses({
+        isLoading: false,
+        courses: data
+    })
+}
+
+useEffect(() => {
+    init();
+}, []);
 
     return(<div>  
-        <div className="bg-stone-800 text-white h-96 font-mono font-semibold text-7xl pt-64 flex justify-center px-10">Your Courses</div> 
+        <div className="bg-stone-800 text-white h-full font-mono font-semibold text-7xl lg:pt-64 md:pt-72  flex justify-center px-10">Your Courses</div> 
     <div className="course-grid grid grid-cols-3 gap-10">
-{Courses.map((test:any)=>
+{courses.map((test:any)=>
        {
         return <div className="p-5">
            <CourseCard 
-            Cname = {test.name}
-            desc= {test.desc}
-            img = {test.img}
+            Cname = {test.title}
+            desc= {test.description}
+            img = {test.imageLink}
+            id = {test._id}
            ></CourseCard>
            </div>
        })
@@ -81,8 +52,10 @@ export const Created = ()=>{
 
 
 export const CourseCard = (props:any) =>{
+  const navigate = useNavigate();
+  const id = props.id;
     return <div className="">
-    <div className="mx-auto w-full  bg-black border-solid border-2 border-white rounded-lg text-white overflow-hidden shadow-md ">
+    <div className="mx-auto w-full bg-black border-solid border-2 border-white rounded-lg text-white overflow-hidden shadow-md ">
     <div className="md:shrink-0 flex h-full ">
     <img className=" object-cover rounded h-full w-full" src={props.img} alt="" />
     </div>
@@ -91,19 +64,8 @@ export const CourseCard = (props:any) =>{
     <p className="text-stone-400 text-left ...">{props.desc}</p>
     </div>
     <div className="">
-    <button className="mx-8 mb-5 p-2 border rounded-lg font-semibold font-mono hover:bg-white hover:text-black">Edit</button>
+    <button className="mx-8 mb-5 p-2 border rounded-lg font-semibold font-mono hover:bg-white hover:text-black" onClick={()=>{navigate('/admin/updatecourses/' + id)}}>Edit</button>
     </div>
     </div>
     </div>
     }
-
-
-const ProgressBar = ()=>{
-    return <div className="relative mb-5 ml-8">
-    
-      <div className="flex h-3 items-center justify-center rounded-full bg-white text-xs leading-none font-semibold font-mono" style={{width: "85%"}}>
-        <span className="p-1 text-black">85%</span>
-      </div>
-    </div>
- 
-}

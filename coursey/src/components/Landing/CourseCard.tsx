@@ -63,7 +63,7 @@ return <div>
 const CourseText= ()=>{
 
   return <div className="col-span-5 text-white mx-10 md:w-1/2  lg:w-full">
-  <h1 className="font-mono font-bold lg:text-6xl  md:text-5xl border-b border-white w-60">COURSES</h1>
+  <h1 className="font-mono font-bold lg:text-6xl  sm:text-5xl border-b border-white w-60">COURSES</h1>
  <div className="pt-10">
   <p className="py-5 text-3xl font-semibold">Web Development Bootcamp: Full Stack Fundamentals</p>
   <p className="py-5 text-3xl font-semibold">Mobile App Development with React Native</p>

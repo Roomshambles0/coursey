@@ -32,7 +32,7 @@ router.post('/signup', (req, res) => __awaiter(void 0, void 0, void 0, function*
     }
 }));
 router.post('/login', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { username, password } = req.headers;
+    const { username, password } = req.body;
     const user = yield db_1.User.findOne({ username, password });
     if (user) {
         const token = jsonwebtoken_1.default.sign({ username, role: 'user' }, auth_1.SECRET, { expiresIn: '1h' });
@@ -47,6 +47,7 @@ router.get('/courses', auth_2.authenticateJwt, (req, res) => __awaiter(void 0, v
     res.json({ courses });
 }));
 router.post('/courses/:courseId', auth_2.authenticateJwt, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    console.log(req.params.courseId);
     const course = yield db_1.Course.findById(req.params.courseId);
     if (course) {
         const courseId = course._id;

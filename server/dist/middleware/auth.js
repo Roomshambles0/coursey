@@ -8,6 +8,7 @@ const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 exports.SECRET = 'SECr3t'; // This should be in an environment variable in a real application
 const authenticateJwt = (req, res, next) => {
     const authHeader = req.headers.authorization;
+    console.log(authHeader);
     if (authHeader) {
         const token = authHeader.split(' ')[1];
         jsonwebtoken_1.default.verify(token, exports.SECRET, (err, user) => {
@@ -15,12 +16,13 @@ const authenticateJwt = (req, res, next) => {
                 return res.sendStatus(403);
             }
             const decodedUser = user;
-            req.headers["user"] = decodedUser.username;
+            console.log(user);
+            req.headers.user = decodedUser.username;
             next();
         });
     }
     else {
-        res.sendStatus(401);
+        res.status(401).json({ message: "token is missing" });
     }
 };
 exports.authenticateJwt = authenticateJwt;

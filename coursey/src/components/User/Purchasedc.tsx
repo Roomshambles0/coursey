@@ -1,76 +1,40 @@
-const Courses = [
-    {name:"Full-Stack Cohort",
-     desc:"Looking to take your team away on a retreat to enjoy awesome food and take in some sunshine? We have a list of places to do just that",
-     img:"/course2.jpg",
-     price:"$599"
-  },
-  {name:"Full-Stack Cohort",
-  desc:"Looking to take your team away on a retreat to enjoy awesome food and take in some sunshine? We have a list of places to do just that",
-  img:"/course2.jpg",
-  price:"$599"
-  },{
-  name:"Full-Stack Cohort",
-  desc:"Looking to take your team away on a retreat to enjoy awesome food and take in some sunshine? We have a list of places to do just that",
-  img:"/course2.jpg",
-  price:"$599"
-  },
-  {
-name:"Full-Stack Cohort",
-desc:"Looking to take your team away on a retreat to enjoy awesome food and take in some sunshine? We have a list of places to do just that",
-img:"/course2.jpg",
-price:"$599"
-},
-    {name:"Full-Stack Cohort",
-    desc:"Looking to take your team away on a retreat to enjoy awesome food and take in some sunshine? We have a list of places to do just that",
-    img:"/course2.jpg",
-    price:"$599"
-    },
-    {
-    name:"Full-Stack Cohort",
-    desc:"Looking to take your team away on a retreat to enjoy awesome food and take in some sunshine? We have a list of places to do just that",
-    img:"/course2.jpg",
-    price:"$599"
-    },
-    {
-    name:"Full-Stack Cohort",
-    desc:"Looking to take your team away on a retreat to enjoy awesome food and take in some sunshine? We have a list of places to do just that",
-    img:"/course2.jpg",
-    price:"$599"
-    },
-    {
-    name:"Full-Stack Cohort",
-    desc:"Looking to take your team away on a retreat to enjoy awesome food and take in some sunshine? We have a list of places to do just that",
-    img:"/course2.jpg",
-    price:"$599"
-    },
-    {
-    name:"Full-Stack Cohort",
-    desc:"Looking to take your team away on a retreat to enjoy awesome food and take in some sunshine? We have a list of places to do just that",
-    img:"/course2.jpg",
-    price:"$599"
-    },
-    {
-    name:"Full-Stack Cohort",
-    desc:"Looking to take your team away on a retreat to enjoy awesome food and take in some sunshine? We have a list of places to do just that",
-    img:"/course2.jpg",
-    price:"$599"
-    }
-  ]
-
+import Carousel from "better-react-carousel"
+import { useState,useEffect } from "react"
+import axios from "axios"
+import { useSetRecoilState,useRecoilValue } from "recoil"
+import { courseState, coursesstate } from "../../store/atoms/course"
+import { coursesDetails } from "../../store/selectors/courses"
 
 
 export const Purchased = ()=>{
-
+  const setAllcourses = useSetRecoilState(coursesstate) ;
+  const Courses = useRecoilValue(coursesDetails);
+  const init = async () => {
+      const response = await axios.get(`http://localhost:3001/user/purchasedCourses`, {
+          headers: {
+              Authorization: `Bearer ${localStorage.getItem('token')}`
+          }
+      })
+      const data = response.data.purchasedCourses;
+      setAllcourses({
+          isLoading: false,
+          courses: data
+      })
+  }
+  
+  useEffect(() => {
+      init();
+  }, []);
     return(<div>  
-        <div className="bg-black text-white h-96 font-mono font-semibold text-7xl pt-64 flex justify-center px-10">my Learnings</div> 
+        <div className="bg-black text-white h-96 font-mono font-semibold text-7xl lg:pt-64 md:pt-72 flex justify-center px-10">my Learnings</div> 
     <div className="course-card-grid grid grid-cols-3 gap-10">
 {Courses.map((test:any)=>
        {
         return <div className="p-5">
            <CourseCard 
-            Cname = {test.name}
-            desc= {test.desc}
-            img = {test.img}
+            Cname = {test.title}
+            desc= {test.description}
+            img = {test.imageLink}
            ></CourseCard>
            </div>
        })
@@ -99,7 +63,7 @@ export const CourseCard = (props:any) =>{
     }
 
 
-const ProgressBar = ()=>{
+const ProgressBar = (props:any)=>{
     return <div className="relative mb-5 ml-8">
     
       <div className="flex h-3 items-center justify-center rounded-full bg-white text-xs leading-none font-semibold font-mono" style={{width: "85%"}}>

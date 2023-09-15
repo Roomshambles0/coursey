@@ -15,5 +15,5 @@ app.use("/admin", admin_1.default);
 app.use("/user", user_1.default);
 // Connect to MongoDB
 // DONT MISUSE THIS THANKYOU!!
-mongoose_1.default.connect('mongodb://localhost:27017/courses');
+mongoose_1.default.connect('mongodb://0.0.0.0:27017/courses');
 app.listen(3001, () => console.log('Server running on port 3001'));

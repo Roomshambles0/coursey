@@ -1,15 +1,40 @@
 import {BsGoogle} from "react-icons/bs";
 import {BsGithub} from "react-icons/bs"
-
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { userState } from "../../store/atoms/user";
+import { useRecoilState,useSetRecoilState } from "recoil";
 
 export default function Signup(){
+  const navigate = useNavigate();
+  const setUser = useSetRecoilState(userState);
     return (
         <div className="mx-auto w-full  bg-black  border-white text-white overflow-hidden shadow-md h-full ">
         <div className="p-8">
         <p className="  font-mono font-semibold text-4xl py-5 flex justify-center ">Start your journey with 100xdevs</p>
         <h1 className="text-white font-mono font-semibold text-7xl py-5 flex justify-center px-10">Be.A.100xDEV</h1>
         </div>
-        <SignupCard></SignupCard>
+        <SignupCard  onClick={async (email,password) => {
+    const res = await axios.post(`http://localhost:3001/user/signup`, {
+        username: email,
+        password: password
+    }, {
+        headers: {
+            "Content-type": "application/json"
+        }
+    });
+    const data = res.data;
+
+    localStorage.setItem("token", data.token);
+    // window.location = "/"
+    setUser({
+        isLoading: false,
+        userEmail: email
+       
+    })
+    navigate("/user")
+}}></SignupCard>
         </div>
     )
 }
@@ -17,7 +42,14 @@ export default function Signup(){
 
 
 
-function SignupCard(){
+function SignupCard(props:{
+  onClick:(
+      username:string,
+      password:string
+)  => void
+}){
+  const [email ,setEmail] = useState("");
+  const [password,setPassword] = useState("");
 
     return <div className="md:shrink-0 flex justify-center h-full w-full ">
     <label className="block border p-5 m-10 rounded-lg">
@@ -37,12 +69,18 @@ function SignupCard(){
   <span className="after:content-['*'] after:ml-0.5 after:text-red-500 block text-sm font-medium text-slate-100">
     Email
   </span>
-  <input type="email" name="email" className="my-2 pr-48 pl-2 py-2 bg-white text-slate-500  border shadow-sm border-slate-300 placeholder-slate-400 focus:outline-none w-full rounded-md sm:text-sm focus:ring-1" placeholder="you@example.com" />
+  <input type="email" name="email" className="my-2 pr-48 pl-2 py-2 bg-white text-slate-500  border shadow-sm border-slate-300 placeholder-slate-400 focus:outline-none w-full rounded-md sm:text-sm focus:ring-1" placeholder="you@example.com"   onChange={(e) => {
+    setEmail(e.target.value);
+                    }}/>
   <span className="after:content-['*'] after:ml-0.5 after:text-red-500 block text-sm font-medium text-slate-100">
     Password
   </span>
-  <input type="Password" name="email" className="my-2 px-3 py-2 bg-white text-slate-500  border shadow-sm border-slate-300 placeholder-slate-400 focus:outline-none w-full rounded-md sm:text-sm focus:ring-1"/>
-  <button className="border p-2 mt-2 rounded-md font-mono hover:text-black hover:bg-white">Submit</button>
+  <input type="Password" name="email" className="my-2 px-3 py-2 bg-white text-slate-500  border shadow-sm border-slate-300 placeholder-slate-400 focus:outline-none w-full rounded-md sm:text-sm focus:ring-1"   onChange={(e) => {
+    setPassword(e.target.value);
+                    }}/>
+  <button className="border p-2 mt-2 rounded-md font-mono hover:text-black hover:bg-white" onClick={async() => {
+  props.onClick(email,password);
+}}>Submit</button>
 </label>
     </div>
 }
