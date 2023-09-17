@@ -5,6 +5,8 @@ import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { adminState } from "../../store/atoms/admin";
 import { useRecoilState,useSetRecoilState } from "recoil";
+import { Link } from "react-router-dom";
+
 
 export default function Adminsignup(){
   const navigate = useNavigate();
@@ -25,7 +27,10 @@ export default function Adminsignup(){
         }
     });
     const data = res.data;
-
+    setAdmin({
+      isLoading:false,
+      userEmail:email
+    })
     localStorage.setItem("token", data.token);
     // window.location = "/"
     if(data){
@@ -76,6 +81,7 @@ function SignupCard(props:{
   <button className="border p-2 mt-2 rounded-md font-mono hover:text-black hover:bg-white" onClick={async() => {
   props.onClick(email,password);
 }}>Signup</button>
+<p className=" flex justify-center font-mono font-semibold  border-t my-4 w-full">Already have an account? <Link to="/admin/signin">Log in</Link></p>
 </label>
     </div>
 }

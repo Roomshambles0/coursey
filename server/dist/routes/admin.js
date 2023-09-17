@@ -25,7 +25,7 @@ router.get("/me", auth_2.authenticateJwt, (req, res) => __awaiter(void 0, void 0
         return;
     }
     res.json({
-        username: admin.username
+        username: admin.username, role: "admin"
     });
 }));
 router.post('/signup', (req, res) => __awaiter(void 0, void 0, void 0, function* () {

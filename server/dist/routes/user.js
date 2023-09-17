@@ -18,6 +18,16 @@ const auth_2 = require("../middleware/auth");
 const db_1 = require("../db");
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const router = express_1.default.Router();
+router.get("/me", auth_2.authenticateJwt, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const user = yield db_1.User.findOne({ username: req.headers.user });
+    if (!user) {
+        res.status(403).json({ msg: "user doesnt exist" });
+        return;
+    }
+    res.json({
+        username: user.username, role: "user"
+    });
+}));
 router.post('/signup', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { username, password } = req.body;
     const user = yield db_1.User.findOne({ username });

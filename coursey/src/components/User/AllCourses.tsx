@@ -31,7 +31,7 @@ useEffect(() => {
     init();
 }, []);
 
-    return(<div className="pt-60 bg-black w-full h-full ">
+    return(<div className="md:pt-60 lg:pt-48 bg-black w-full h-full ">
         <Allcourses></Allcourses>
     </div>)
 }

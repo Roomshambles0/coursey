@@ -26,11 +26,11 @@ export const Purchased = ()=>{
       init();
   }, []);
     return(<div>  
-        <div className="bg-black text-white h-96 font-mono font-semibold text-7xl lg:pt-64 md:pt-72 flex justify-center px-10">my Learnings</div> 
+        <div className="bg-black text-white md:h-96 lg:h-64 font-mono font-semibold text-7xl lg:pt-44 md:pt-72 flex justify-center px-10">my Learnings</div> 
     <div className="course-card-grid grid grid-cols-3 gap-10">
 {Courses.map((test:any)=>
        {
-        return <div className="p-5">
+        return <div className="px-5">
            <CourseCard 
             Cname = {test.title}
             desc= {test.description}

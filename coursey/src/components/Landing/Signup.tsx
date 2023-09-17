@@ -25,14 +25,12 @@ export default function Signup(){
         }
     });
     const data = res.data;
-
     localStorage.setItem("token", data.token);
     // window.location = "/"
-    setUser({
-        isLoading: false,
-        userEmail: email
-       
-    })
+   setUser({
+    isLoading:false,
+    userEmail:email
+   })
     navigate("/user")
 }}></SignupCard>
         </div>

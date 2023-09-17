@@ -28,6 +28,10 @@ export default function Adminsignin(){
     const data = res.data;
     localStorage.setItem("token", data.token);
     // window.location = "/"
+    setAdmin({
+      isLoading:false,
+      userEmail:username
+    })
     if(data){
       navigate("/admin/courses")
     }

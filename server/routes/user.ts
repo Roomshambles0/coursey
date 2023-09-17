@@ -6,7 +6,18 @@ import jwt from 'jsonwebtoken';
 const router = express.Router();
 import mongoose from 'mongoose';
 
-
+ 
+  
+router.get("/me", authenticateJwt, async (req, res) => {
+  const user = await User.findOne({ username: req.headers.user});
+  if (!user) {
+    res.status(403).json({msg: "user doesnt exist"})
+    return
+  }
+  res.json({
+      username: user.username, role:"user"
+  })
+})
 
   router.post('/signup', async (req, res) => {
     const { username, password } = req.body;

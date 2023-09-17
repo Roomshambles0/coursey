@@ -28,7 +28,10 @@ const setUser = useSetRecoilState(userState);
 
     localStorage.setItem("token", data.token);
     // window.location = "/"
-   
+   setUser({
+    isLoading:false,
+    userEmail:email
+   })
     navigate("/user")
 }}></SigninCard>
    </div>
